@@ -1,6 +1,7 @@
 package de.haevn.models.dependency;
 
 import java.util.List;
+import java.util.Locale;
 
 public class CustomModel {
     private String groupId;
@@ -20,6 +21,17 @@ public class CustomModel {
         this.dependencies = dependencies;
         return this;
     }
+
+    public CustomModel addDependencies(List<CustomDependency> dependencies, String artifactId) {
+        System.out.println(artifactId);
+        this.dependencies = dependencies.stream()
+                .filter(dependency -> dependency.getArtifactID().toLowerCase(Locale.ROOT).contains(artifactId))
+                .toList();
+        return this;
+    }
+
+
+
 
     public CustomModel addArtifactId(String artifactId) {
         this.artifactId = artifactId;

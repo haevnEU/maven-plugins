@@ -29,6 +29,9 @@ public class ModelAnalyzer extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     MavenProject project;
 
+    @Parameter(property = "groupId", required = false)
+    String artifactID;
+
     public static final String OUT_PATH = "./target/analyzer/results/model.json";
 
     public void execute() throws MojoExecutionException {
@@ -56,8 +59,13 @@ public class ModelAnalyzer extends AbstractMojo {
                     .addPackaging(project.getPackaging())
                     .addUrl(project.getUrl())
                     .addVersion(project.getVersion())
-                    .addProfiles(profiles)
-                    .addDependencies(dependencies);
+                    .addProfiles(profiles);
+            getLog().info(artifactID);
+            if(null == artifactID || artifactID.isEmpty() || artifactID.isBlank()){
+                    model.addDependencies(dependencies);
+            }else{
+                model.addDependencies(dependencies, artifactID);
+            }
             getLog().debug("Summary model created");
 
             getLog().debug("Create json data from model");
